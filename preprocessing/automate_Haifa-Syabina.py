@@ -115,27 +115,33 @@ def inverse_transform_data(transformed_data, load_path, new_data_columns, num_co
 import numpy as np
 pipeline_path = 'preprocessor_pipeline.joblib'
 col = pd.read_csv("data.csv")
+df = pd.read_csv("preprocessing/personality_dataset_preprocessing.csv")
+df = df.drop(columns=['Personality'])
 
-new_data = [4.0, 6.0, 2.0, 0.0, 8.0, "No", "No"]
+# new_data = [4.0, 6.0, 2.0, 0.0, 8.0, "No", "No"]
 
 # Mengubah menjadi numpy.ndarray
-new_data = np.array(new_data)
+# new_data = np.array(df)
 
-new_data = pd.DataFrame([new_data], columns=col.columns)
-transformed_data = inference(new_data, pipeline_path)
+# new_data = pd.DataFrame([new_data], columns=col.columns)
+transformed_data = inference(df, pipeline_path)
 
-num_cols = ['Time_spent_Alone',	'Social_event_attendance', 'Going_outside', 'Friends_circle_size', 'Post_frequency']
-cat_cols = ['Stage_fear', 'Drained_after_socializing']
+# num_cols = ['Time_spent_Alone',	'Social_event_attendance', 'Going_outside', 'Friends_circle_size', 'Post_frequency']
+# cat_cols = ['Stage_fear', 'Drained_after_socializing']
 
-inversed_data = inverse_transform_data(transformed_data, pipeline_path, new_data.columns, num_cols, cat_cols)
+columns = ['Time_spent_Alone',	'Social_event_attendance', 'Going_outside', 'Friends_circle_size', 'Post_frequency',
+           'Stage_fear', 'Drained_after_socializing']
 
-transformed_df = pd.DataFrame(transformed_data, columns=new_data.columns)
+# inversed_data = inverse_transform_data(transformed_data, pipeline_path, new_data.columns, num_cols, cat_cols)
+# transformed_feature_names = pipeline_path.get_feature_names_out()
+
+transformed_df = pd.DataFrame(transformed_data, columns=columns)
 transformed_df.to_csv("data.csv", index=False)
 
 # Output hasil preprocessing dan inference
-print("Data setelah preprocessing (training):")
-print(new_data)
-print("\nData baru setelah transformasi:")
-print(transformed_data)
-print("\nData setelah inverse transform:")
-print(inversed_data)
+# print("Data setelah preprocessing (training):")
+# print(df)
+# print("\nData baru setelah transformasi:")
+# print(transformed_data)
+# print("\nData setelah inverse transform:")
+# print(inversed_data)

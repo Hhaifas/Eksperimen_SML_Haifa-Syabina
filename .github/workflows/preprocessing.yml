@@ -23,14 +23,17 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.11.2'
-          
-      - name: Install Python dependencies
-        run: pip install -r requirements.txt
 
+      - name: Install Python dependencies
+        working-directory: preprocessing
+        run: |
+          pip install -r requirements.txt
 
       # Jalankan script preprocessing
       - name: Run preprocessing script
-        run: python preprocessing/automate_Haifa-Syabina.py
+        working-directory: preprocessing
+        run: |
+          python automate_Haifa-Syabina.py
 
       # Upload hasil dataset preprocessing
       - name: Upload processed dataset as artifact
