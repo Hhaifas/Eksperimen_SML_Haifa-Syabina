@@ -18,6 +18,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Install Python dependencies
+        run: pip install mlflow pandas numpy scikit-learn joblib
+
       # Setup python
       - name: Set up Python 3.11.2
         uses: actions/setup-python@v4
@@ -33,16 +36,13 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: processed-dataset
-          path: data/processed/dataset_raw.csv
+          path: data.csv
 
       - name: Get latest MLflow run_id
         id: get_run_id
         run: |
           RUN_ID=$(ls -td mlruns/0/*/ | head -1 | xargs basename)
           echo "run_id=$RUN_ID" >> $GITHUB_OUTPUT
-
-      - name: Install Python dependencies
-        run: pip install mlflow pandas numpy
 
       - name: Upload to GitHub Artifacts
         uses: actions/upload-artifact@v4

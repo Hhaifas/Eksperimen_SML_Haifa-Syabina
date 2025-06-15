@@ -65,6 +65,8 @@ def preprocess_data(data, target_column, save_path, file_path):
     
     return X_train, X_test, y_train, y_test 
 
+data = pd.read_csv("preprocessing/personality_dataset_preprocessing.csv")
+X_train, X_test, y_train, y_test = preprocess_data(data, 'Personality', 'preprocessor_pipeline.joblib', 'data.csv')
 
 # Validasi memastikan tahapan preprocessing dilakukan dan disimpan dengan baik
 def inference(new_data, load_path):
