@@ -77,7 +77,58 @@ def inference(new_data, load_path):
     return transformed_data
 
 
-data = pd.read_csv("personality_dataset.csv")
-data.head()
+def inverse_transform_data(transformed_data, load_path, new_data_columns, num_cols, cat_cols):
+    preprocessor = load(load_path)
+    numeric_transformer = preprocessor.named_transformers_['num']['scaler']
+    categorical_transform = preprocessor.named_transformers_['cat']['encoder']
+    n_num = len(num_cols)
+    n_cat = len(cat_cols)
 
-X_train, X_test, y_train, y_test = preprocess_data(data, 'Personality', 'preprocessor_pipeline.joblib', 'data.csv')
+    # Slicing sesuai urutan pipeline (asumsikan num_cols dulu, lalu cat_cols)
+    transformed_numeric_data = transformed_data[:, :n_num]
+    transformed_categorical_data = transformed_data[:, n_num:n_num+n_cat]
+
+    original_numeric_data = numeric_transformer.inverse_transform(transformed_numeric_data)
+    original_categorical_data = categorical_transform.inverse_transform(transformed_categorical_data)
+
+    # Buat dataframe kosong dengan urutan kolom asli
+    inversed_data = pd.DataFrame(index=range(transformed_data.shape[0]), columns=new_data_columns)
+
+    # Isi kolom satu per satu sesuai urutan aslinya
+    num_idx = 0
+    cat_idx = 0
+    for col in new_data_columns:
+        if col in num_cols:
+            inversed_data[col] = original_numeric_data[:, num_idx]
+            num_idx += 1
+        elif col in cat_cols:
+            inversed_data[col] = original_categorical_data[:, cat_idx]
+            cat_idx += 1
+
+    return inversed_data
+
+
+import numpy as np
+pipeline_path = 'preprocessor_pipeline.joblib'
+col = pd.read_csv("data.csv")
+
+new_data = [4.0, "No", 6.0, 2.0, "No", 0.0, 8.0]
+
+# Mengubah menjadi numpy.ndarray
+new_data = np.array(new_data)
+
+new_data = pd.DataFrame([new_data], columns=col.columns)
+transformed_data = inference(new_data, pipeline_path)
+
+num_cols = ['Time_spent_Alone',	'Social_event_attendance', 'Going_outside', 'Friends_circle_size', 'Post_frequency']
+cat_cols = ['Stage_fear', 'Drained_after_socializing']
+
+inversed_data = inverse_transform_data(transformed_data, pipeline_path, new_data.columns, num_cols, cat_cols)
+
+# Output hasil preprocessing dan inference
+print("Data setelah preprocessing (training):")
+print(new_data)
+print("\nData baru setelah transformasi:")
+print(transformed_data)
+print("\nData setelah inverse transform:")
+print(inversed_data)
