@@ -13,8 +13,10 @@ def preprocess_data(data, target_column, save_path, file_path):
     categorical_features = data.select_dtypes(include=['object']).columns.tolist()
     column_names = data.columns
     # Mengambil nama kolom tanpa target
-    column_names = data.columns.drop(target_column)
-    
+    # column_names = data.columns.drop(target_column)
+    column_names = ['Time_spent_Alone', 'Social_event_attendance', 'Going_outside', 'Friends_circle_size', 'Post_frequency', 'Stage_fear', 'Drained_after_socializing']
+
+
     # Membuat DataFrame kosong dengan nama kolom
     df_header = pd.DataFrame(columns=column_names)
     
@@ -114,7 +116,7 @@ import numpy as np
 pipeline_path = 'preprocessor_pipeline.joblib'
 col = pd.read_csv("data.csv")
 
-new_data = [4.0, "No", 6.0, 2.0, "No", 0.0, 8.0]
+new_data = [4.0, 6.0, 2.0, 0.0, 8.0, "No", "No"]
 
 # Mengubah menjadi numpy.ndarray
 new_data = np.array(new_data)
@@ -126,6 +128,9 @@ num_cols = ['Time_spent_Alone',	'Social_event_attendance', 'Going_outside', 'Fri
 cat_cols = ['Stage_fear', 'Drained_after_socializing']
 
 inversed_data = inverse_transform_data(transformed_data, pipeline_path, new_data.columns, num_cols, cat_cols)
+
+transformed_df = pd.DataFrame(transformed_data, columns=new_data.columns)
+transformed_df.to_csv("data.csv", index=False)
 
 # Output hasil preprocessing dan inference
 print("Data setelah preprocessing (training):")
