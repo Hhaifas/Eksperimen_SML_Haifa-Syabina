@@ -7,6 +7,7 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:
 
 env:
   CSV_URL: 'Eksperimen_SML_Haifa-Syabina/preprocessing/personality_dataset.csv'
@@ -25,15 +26,11 @@ jobs:
           python-version: '3.11.2'
 
       - name: Install Python dependencies
-        working-directory: preprocessing
-        run: |
-          pip install -r requirements.txt
+        run: pip install -r requirements.txt
 
       # Jalankan script preprocessing
       - name: Run preprocessing script
-        working-directory: preprocessing
-        run: |
-          python automate_Haifa-Syabina.py
+        run: python preprocessing/automate_Haifa-Syabina.py
 
       # Upload hasil dataset preprocessing
       - name: Upload processed dataset as artifact
