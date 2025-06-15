@@ -18,14 +18,15 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Install Python dependencies
-        run: pip install -r requirements.txt
-
       # Setup python
       - name: Set up Python 3.11.2
         uses: actions/setup-python@v4
         with:
           python-version: '3.11.2'
+          
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
 
       # Jalankan script preprocessing
       - name: Run preprocessing script
