@@ -24,15 +24,14 @@ jobs:
 
       # Jalankan script preprocessing
       - name: Run preprocessing script
-        run: |
-          python preprocessing/automate_Haifa-Syabina.py
+        run: python preprocessing/automate_Haifa-Syabina.py
 
       # Upload hasil dataset preprocessing
       - name: Upload processed dataset as artifact
         uses: actions/upload-artifact@v4
         with:
           name: processed-dataset
-          path: data.csv
+          path: data_preprocessing.csv
 
       # - name: Get latest MLflow run_id
       #   id: get_run_id
