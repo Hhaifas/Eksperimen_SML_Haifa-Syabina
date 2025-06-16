@@ -88,7 +88,7 @@ data = pd.read_csv("personality_dataset.csv")
 X_train, X_test, y_train, y_test = preprocess_data(data, 
                                                    'Personality', 
                                                    'preprocessor_pipeline.joblib', 
-                                                   'perprocessing/data_preprocessing.csv',
+                                                   'preprocessing/data_preprocessing.csv',
                                                    'target_encoder.joblib')
 
 # Validasi memastikan tahapan preprocessing dilakukan dan disimpan dengan baik
