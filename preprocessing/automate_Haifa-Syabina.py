@@ -1,6 +1,6 @@
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
-from joblib import dump, load
+from joblib import dump
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import StandardScaler, OrdinalEncoder, LabelEncoder
 from sklearn.model_selection import train_test_split
@@ -11,12 +11,10 @@ def preprocess_data(data, target_column, save_path, file_path, target_encoder_pa
     # Menentukan fitur numerik dan kategoris
     numeric_features = data.select_dtypes(include=['float64', 'int64']).columns.tolist()
     categorical_features = data.select_dtypes(include=['object']).columns.tolist()
-    column_names = data.columns
-    # Mengambil nama kolom tanpa target
-    # column_names = data.columns.drop(target_column)
-    # column_names = ['Time_spent_Alone', 'Social_event_attendance', 'Going_outside', 'Friends_circle_size', 'Post_frequency', 'Stage_fear', 'Drained_after_socializing']
-    # Membuat DataFrame kosong dengan nama kolom
     
+    column_names = data.columns
+    column_names = data.columns.drop(target_column)
+    # Membuat DataFrame kosong dengan nama kolom
     df_header = pd.DataFrame(columns=column_names)
     
     # Menyimpan nama kolom sebgai header tanpa data
@@ -39,7 +37,8 @@ def preprocess_data(data, target_column, save_path, file_path, target_encoder_pa
     categorical_transformer = Pipeline(steps=[
         ('imputer', SimpleImputer(strategy='constant', fill_value='missing')),
         ('encoder', OrdinalEncoder())
-    ])
+    ])    
+    
     
     # Column Transformer
     preprocessor = ColumnTransformer(
@@ -80,15 +79,16 @@ def preprocess_data(data, target_column, save_path, file_path, target_encoder_pa
     
     X_train[target_column] = y_train
     X_train.to_csv(file_path, index=False)
-
     
-    return X_train, X_test, y_train, y_test 
+    return X_train, X_test, y_train, y_test
+    
+ 
 
-data = pd.read_csv("preprocessing/personality_dataset_preprocessing.csv")
+data = pd.read_csv("personality_dataset.csv")
 X_train, X_test, y_train, y_test = preprocess_data(data, 
                                                    'Personality', 
                                                    'preprocessor_pipeline.joblib', 
-                                                   'data.csv',
+                                                   'perprocessing/data_preprocessing.csv',
                                                    'target_encoder.joblib')
 
 # Validasi memastikan tahapan preprocessing dilakukan dan disimpan dengan baik

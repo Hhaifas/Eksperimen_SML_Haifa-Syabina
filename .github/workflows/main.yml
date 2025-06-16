@@ -1,22 +1,16 @@
-name: preprocessing
+name: Preprocess Dataset
 
 on:
   push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-  workflow_dispatch:
-
-env:
-  CSV_URL: 'Eksperimen_SML_Haifa-Syabina/preprocessing/personality_dataset.csv'
+    paths:
+      - 'preprocessing/automate_Haifa-Syabina.py'
+      - 'personality_dataset.csv'
 
 jobs:
-  build:
+  preprocess:
     runs-on: ubuntu-latest
-
     steps:
+      - name: Checkout repo
       - uses: actions/checkout@v3
 
       # Setup python
@@ -30,7 +24,8 @@ jobs:
 
       # Jalankan script preprocessing
       - name: Run preprocessing script
-        run: python preprocessing/automate_Haifa-Syabina.py
+        run: |
+          python preprocessing/automate_Haifa-Syabina.py
 
       # Upload hasil dataset preprocessing
       - name: Upload processed dataset as artifact
