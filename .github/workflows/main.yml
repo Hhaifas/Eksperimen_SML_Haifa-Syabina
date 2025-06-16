@@ -1,16 +1,22 @@
-name: Preprocess Dataset
+name: preprocessing
 
 on:
   push:
-    paths:
-      - 'preprocessing/automate_Haifa-Syabina.py'
-      - 'personality_dataset.csv'
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  CSV_URL: 'Eksperimen_SML_Haifa-Syabina/personality_dataset.csv'
 
 jobs:
-  preprocess:
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repo
       - uses: actions/checkout@v3
 
       # Setup python
@@ -31,7 +37,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: processed-dataset
-          path: data_preprocessing.csv
+          path: preprocessing/data_preprocessing.csv
 
       # - name: Get latest MLflow run_id
       #   id: get_run_id
