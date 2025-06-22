@@ -8,6 +8,9 @@ import pandas as pd
 
 
 def preprocess_data(data, target_column, save_path, file_path, target_encoder_path):
+    # hapus data duplikat
+    data = data.drop_duplicates()
+       
     # Menentukan fitur numerik dan kategoris
     numeric_features = data.select_dtypes(include=['float64', 'int64']).columns.tolist()
     categorical_features = data.select_dtypes(include=['object']).columns.tolist()
@@ -84,85 +87,10 @@ def preprocess_data(data, target_column, save_path, file_path, target_encoder_pa
     
  
 
-data = pd.read_csv("personality_dataset.csv")
-X_train, X_test, y_train, y_test = preprocess_data(data, 
-                                                   'Personality', 
-                                                   'preprocessor_pipeline.joblib', 
-                                                   'preprocessing/data_preprocessing.csv',
-                                                   'target_encoder.joblib')
+# data = pd.read_csv("personality_dataset.csv")
+# X_train, X_test, y_train, y_test = preprocess_data(data, 
+#                                                    'Personality', 
+#                                                    'preprocessor_pipeline.joblib', 
+#                                                    'preprocessing/data_preprocessing.csv',
+#                                                    'target_encoder.joblib')
 
-# Validasi memastikan tahapan preprocessing dilakukan dan disimpan dengan baik
-# def inference(new_data, load_path):
-#     # Memuat pipeline preprocessing
-#     preprocessor = load(load_path)
-#     print(f"Pipeline preprocessing dimuat dari: {load_path}")
-    
-#     # Transformasi data baru
-#     transformed_data = preprocessor.transform(new_data)
-#     return transformed_data
-
-
-# def inverse_transform_data(transformed_data, load_path, new_data_columns, num_cols, cat_cols):
-#     preprocessor = load(load_path)
-#     numeric_transformer = preprocessor.named_transformers_['num']['scaler']
-#     categorical_transform = preprocessor.named_transformers_['cat']['encoder']
-#     n_num = len(num_cols)
-#     n_cat = len(cat_cols)
-
-#     # Slicing sesuai urutan pipeline (asumsikan num_cols dulu, lalu cat_cols)
-#     transformed_numeric_data = transformed_data[:, :n_num]
-#     transformed_categorical_data = transformed_data[:, n_num:n_num+n_cat]
-
-#     original_numeric_data = numeric_transformer.inverse_transform(transformed_numeric_data)
-#     original_categorical_data = categorical_transform.inverse_transform(transformed_categorical_data)
-
-#     # Buat dataframe kosong dengan urutan kolom asli
-#     inversed_data = pd.DataFrame(index=range(transformed_data.shape[0]), columns=new_data_columns)
-
-#     # Isi kolom satu per satu sesuai urutan aslinya
-#     num_idx = 0
-#     cat_idx = 0
-#     for col in new_data_columns:
-#         if col in num_cols:
-#             inversed_data[col] = original_numeric_data[:, num_idx]
-#             num_idx += 1
-#         elif col in cat_cols:
-#             inversed_data[col] = original_categorical_data[:, cat_idx]
-#             cat_idx += 1
-
-#     return inversed_data
-
-
-# import numpy as np
-# pipeline_path = 'preprocessor_pipeline.joblib'
-# col = pd.read_csv("data.csv")
-# df = pd.read_csv("preprocessing/personality_dataset_preprocessing.csv")
-# df = df.drop(columns=['Personality'])
-
-# # new_data = [4.0, 6.0, 2.0, 0.0, 8.0, "No", "No"]
-
-# # Mengubah menjadi numpy.ndarray
-# # new_data = np.array(df)
-
-# # new_data = pd.DataFrame([new_data], columns=col.columns)
-# transformed_data = inference(df, pipeline_path)
-
-# # num_cols = ['Time_spent_Alone',	'Social_event_attendance', 'Going_outside', 'Friends_circle_size', 'Post_frequency']
-# # cat_cols = ['Stage_fear', 'Drained_after_socializing']
-
-# columns = ['Time_spent_Alone',	'Social_event_attendance', 'Going_outside', 'Friends_circle_size', 'Post_frequency',
-#            'Stage_fear', 'Drained_after_socializing']
-
-# # inversed_data = inverse_transform_data(transformed_data, pipeline_path, new_data.columns, num_cols, cat_cols)
-# # transformed_feature_names = pipeline_path.get_feature_names_out()
-
-# transformed_df = pd.DataFrame(transformed_data, columns=columns)
-# transformed_df.to_csv("data.csv", index=False)
-
-# # Output hasil preprocessing dan inference
-# # print("Data setelah preprocessing (training):")
-# # print(df)
-# # print("\nData baru setelah transformasi:")
-# # print(transformed_data)
-# # print("\nData setelah inverse transform:")
-# # print(inversed_data)
